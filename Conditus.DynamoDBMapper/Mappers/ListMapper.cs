@@ -60,5 +60,30 @@ namespace Conditus.DynamoDBMapper.Mappers
 
             return idProperty;
         }
+
+        public static List<T> ToEntityList<T>(this Dictionary<string, AttributeValue> map)
+            where T : new()
+        {
+            return map.ToEntityList(typeof(T))
+                .Cast<T>()
+                .ToList();
+        }
+
+        public static List<object> ToEntityList(this Dictionary<string, AttributeValue> map, Type elementType)
+        {
+            if (map.Count == 0)
+                return new List<object>();
+            
+            var attributeValues = map
+                .Select(m => m.Value);
+
+            if (!attributeValues.First().IsMSet)
+                throw new NotImplementedException();
+            
+            var entityList = attributeValues.Select(v => v.M.ToEntity(elementType))
+                .ToList();
+
+            return entityList;
+        }
     }
 }

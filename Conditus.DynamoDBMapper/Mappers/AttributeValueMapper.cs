@@ -1,27 +1,39 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using Amazon.DynamoDBv2.Model;
+using Conditus.DynamoDBMapper.Attributes;
 
 namespace Conditus.DynamoDBMapper.Mappers
 {
     public static class AttributeValueMapper
     {
-        public static T GetEntity<T>(this Dictionary<string, AttributeValue> attributeMap)
+        public static T ToEntity<T>(this Dictionary<string, AttributeValue> attributeMap)
             where T : new()
         {
-            var entity = new T();
+            return (T)attributeMap.ToEntity(typeof(T));
+        }
 
-            foreach (var property in entity.GetType().GetProperties())
+        public static object ToEntity(this Dictionary<string, AttributeValue> attributeMap, Type type)
+        {
+            var entity = Activator.CreateInstance(type);
+
+            foreach (var propertyInfo in entity.GetType().GetProperties())
             {
-                var entityProperty = entity.GetType().GetProperty(property.Name);
+                var entityProperty = entity.GetType().GetProperty(propertyInfo.Name);
                 if (entityProperty == null || !entityProperty.CanWrite) continue;
 
-                var attributeValue = attributeMap.GetAttributeValue(property.Name);
+                var attributeValue = attributeMap.GetAttributeValue(propertyInfo.Name);
                 if (attributeValue == null) continue;
 
-                object propertyValue = attributeValue.GetPropertyValue(property.PropertyType);
+                var propertyValue = attributeValue.GetPropertyValue(propertyInfo);
 
-                if(propertyValue != null) entityProperty.SetValue(entity, propertyValue);
+                if (propertyValue == null) 
+                    continue;
+
+                entityProperty.SetValue(entity, propertyValue);
             }
 
             return entity;
@@ -35,8 +47,10 @@ namespace Conditus.DynamoDBMapper.Mappers
             return attributeValue;
         }
 
-        private static object GetPropertyValue(this AttributeValue attributeValue, Type propertyType)
+        private static object GetPropertyValue(this AttributeValue attributeValue, PropertyInfo propertyInfo)
         {
+            var propertyType = propertyInfo.PropertyType;
+
             if (propertyType == typeof(string))
                 return attributeValue.S;
 
@@ -51,12 +65,17 @@ namespace Conditus.DynamoDBMapper.Mappers
 
             if (propertyType.IsEnum)
                 return Enum.ToObject(propertyType, int.Parse(attributeValue.N));
-            
+
             if (propertyType == typeof(DateTime) || propertyType == typeof(DateTime?))
                 return DateTimeMapper.FromUtcUnixTimeMilliseconds(attributeValue.N);
-            
-            if (propertyType == typeof(object))
-                return Convert.ChangeType(attributeValue.M.GetEntity<object>(), propertyType);
+
+            if (propertyInfo.GetCustomAttribute(typeof(MapListAttribute)) != null)
+                return ListMapper.ToEntityList(
+                    attributeValue.M,
+                    propertyType.GetGenericArguments().First());
+
+            if (attributeValue.IsMSet)
+                return attributeValue.M.ToEntity(propertyType);
 
             return null;
         }

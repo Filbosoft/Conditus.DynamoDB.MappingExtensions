@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Amazon.DynamoDBv2.DataModel;
+using Amazon.DynamoDBv2.Model;
 using Conditus.DynamoDBMapper.Attributes;
 using Conditus.DynamoDBMapper.Mappers;
 using FluentAssertions;
@@ -86,6 +87,77 @@ namespace Conditus.DynamoDBMapper.Tests
 
             //Then
             attributeValueMap.Should().NotContainKey(nameof(ClassWithNestedListMap.NestedItems));
+        }
+
+        [Fact]
+        public void ToEntityList_WithValidList_ShouldReturnListWithEntities()
+        {
+            //Given
+            var element = new NestedItem
+            {
+                Id = "e64173da-d545-4b16-9a9c-7aa1b474ce3a",
+                StringProp = "stringProp",
+                LongProp = 100
+            };
+            var listElement = new Dictionary<string, AttributeValue>
+            {
+                {nameof(NestedItem.Id), new AttributeValue{ S = element.Id }},
+                {nameof(NestedItem.StringProp), new AttributeValue{ S = element.StringProp }},
+                {nameof(NestedItem.LongProp), new AttributeValue{ N = element.LongProp.ToString() }}
+            };
+            var listMap = new Dictionary<string, AttributeValue>
+            {
+                {element.Id, new AttributeValue{ M = listElement }}
+            };
+
+            //When
+            var list = listMap.ToEntityList<NestedItem>();
+
+            //Then
+            list.Should().NotBeNullOrEmpty()
+                .And.ContainEquivalentOf(element);
+        }
+
+        [Fact]
+        public void ToEntity_WithNestedMapList_ShouldReturnEntityWithNestedList()
+        {
+            //Given
+            var nestedElement = new NestedItem
+            {
+                Id = "e64173da-d545-4b16-9a9c-7aa1b474ce3a",
+                StringProp = "stringProp",
+                LongProp = 100
+            };
+            var element = new ClassWithNestedListMap
+            {
+                Name = "el",
+                NestedItems = new List<NestedItem> { nestedElement }
+            };
+
+            var nestedElementMap = new Dictionary<string, AttributeValue>
+            {
+                {nameof(NestedItem.Id), new AttributeValue{ S = nestedElement.Id }},
+                {nameof(NestedItem.StringProp), new AttributeValue{ S = nestedElement.StringProp }},
+                {nameof(NestedItem.LongProp), new AttributeValue{ N = nestedElement.LongProp.ToString() }}
+            };
+            var listMap = new Dictionary<string, AttributeValue>
+            {
+                {nestedElement.Id, new AttributeValue{ M = nestedElementMap }}
+            };
+            var elementMap = new Dictionary<string, AttributeValue>
+            {
+                {nameof(ClassWithNestedListMap.Name), new AttributeValue{S = element.Name}},
+                {nameof(ClassWithNestedListMap.NestedItems), new AttributeValue{M = listMap}}
+            };
+
+            //When
+            var entity = elementMap.ToEntity<ClassWithNestedListMap>();
+
+            //Then
+            entity.Should().NotBeNull()
+                .And.BeEquivalentTo(element);
+            entity.NestedItems.Should().NotBeNullOrEmpty()
+                .And.ContainEquivalentOf(nestedElement);
         }
     }
 }

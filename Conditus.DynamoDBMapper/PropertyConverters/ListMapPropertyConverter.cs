@@ -38,7 +38,7 @@ namespace Conditus.DynamoDBMapper.PropertyConverters
 
             foreach (var subEntryMap in subEntryMaps)
             {
-                var entity = subEntryMap.GetEntity<T>();
+                var entity = subEntryMap.ToEntity<T>();
                 entities.Add(entity);
             }
 
