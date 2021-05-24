@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <PackageId>DynamoDBMapper</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>The Conditus Team</Authors>
+    <Company>Conditus</Company>
+    <Description>
+      This nuget package includes mapping logic for DynamoDB models, specific for the Conditus Trader.
+    </Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.0.26" />
+  </ItemGroup>
+
+</Project>
