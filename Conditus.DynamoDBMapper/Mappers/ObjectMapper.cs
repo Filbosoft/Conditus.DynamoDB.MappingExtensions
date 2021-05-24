@@ -7,7 +7,7 @@ using System.Text.Json;
 using Amazon.DynamoDBv2.Model;
 using DynamoDBMapper.Attributes;
 
-namespace DynamoDBMapper.Mappers
+namespace Conditus.DynamoDBMapper.Mappers
 {
     public static class ObjectMapper
     {

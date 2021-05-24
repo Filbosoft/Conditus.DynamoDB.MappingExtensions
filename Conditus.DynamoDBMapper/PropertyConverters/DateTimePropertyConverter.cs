@@ -3,7 +3,7 @@ using Amazon.DynamoDBv2.DataModel;
 using Amazon.DynamoDBv2.DocumentModel;
 using DynamoDBMapper.Mappers;
 
-namespace DynamoDBMapper.PropertyConverters
+namespace Conditus.DynamoDBMapper.PropertyConverters
 {
     public class DateTimePropertyConverter : IPropertyConverter
     {

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Reflection;
 using Amazon.DynamoDBv2.DataModel;
 
-namespace DynamoDBMapper.Mappers
+namespace Conditus.DynamoDBMapper.Mappers
 {
     public static class ListMapper
     {

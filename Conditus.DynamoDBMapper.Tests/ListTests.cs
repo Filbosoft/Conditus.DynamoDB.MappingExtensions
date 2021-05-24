@@ -5,7 +5,7 @@ using DynamoDBMapper.Mappers;
 using FluentAssertions;
 using Xunit;
 
-namespace DynamoDBMapper.Tests
+namespace Conditus.DynamoDBMapper.Tests
 {
     public class ListTests
     {
