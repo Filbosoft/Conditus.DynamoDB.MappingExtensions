@@ -1,7 +1,8 @@
+using System.Collections;
 using System.Collections.Generic;
 using Amazon.DynamoDBv2.DataModel;
-using DynamoDBMapper.Attributes;
-using DynamoDBMapper.Mappers;
+using Conditus.DynamoDBMapper.Attributes;
+using Conditus.DynamoDBMapper.Mappers;
 using FluentAssertions;
 using Xunit;
 
@@ -52,9 +53,39 @@ namespace Conditus.DynamoDBMapper.Tests
 
             var nestedItemsAttributeValue = attributeMap.GetAttributeValue("NestedItems");
             var nestedItemsMap = nestedItemsAttributeValue.M;
-            
+
             nestedItemsMap.Should().NotBeEmpty()
                 .And.ContainKey(nestedItem.Id);
+        }
+
+        [Fact]
+        public void GetMapAttributeValue_WithEmptyList_ShouldReturnNull()
+        {
+            //Given
+            var obj = new List<object>();
+
+            //When
+            var attributeValue = ((IEnumerable)obj).GetMapAttributeValue();
+
+            //Then
+            attributeValue.Should().BeNull();
+        }
+
+        [Fact]
+        public void GetAttributeValueMap_WithEntityWithEmptyList_ShouldReturnMapWithoutValueForTheEmptyProperty()
+        {
+            //Given
+            var testObject = new ClassWithNestedListMap
+            {
+                Name = "Test",
+                NestedItems = new List<NestedItem>()
+            };
+
+            //When
+            var attributeValueMap = testObject.GetAttributeValueMap();
+
+            //Then
+            attributeValueMap.Should().NotContainKey(nameof(ClassWithNestedListMap.NestedItems));
         }
     }
 }

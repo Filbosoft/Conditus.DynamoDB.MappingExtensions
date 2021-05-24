@@ -13,6 +13,9 @@ namespace Conditus.DynamoDBMapper.Mappers
         public static AttributeValue GetMapAttributeValue(this IEnumerable enumerable)
         {
             var attributeMap = enumerable.GetAttributeValueMap();
+            
+            if (attributeMap == null)
+                return null;
 
             return new AttributeValue { M = attributeMap };
         }
@@ -23,7 +26,7 @@ namespace Conditus.DynamoDBMapper.Mappers
                 .ToList<object>();
             
             if (list.Count == 0)
-                return new Dictionary<string, AttributeValue>();
+                return null;
 
             var map = new Dictionary<string, AttributeValue>();
             var firstItem = list.FirstOrDefault();

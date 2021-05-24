@@ -14,6 +14,9 @@ namespace Conditus.DynamoDBMapper.Mappers
         public static AttributeValue GetAttributeValue(this object obj)
             => new AttributeValue { S = obj.ToString() };
 
+        public static AttributeValue GetMapAttributeValue(this object obj)
+            => new AttributeValue { M = GetAttributeValueMap(obj) };
+
         public static Dictionary<string, AttributeValue> GetAttributeValueMap(this object obj)
         {
             var map = new Dictionary<string, AttributeValue>();
@@ -62,12 +65,12 @@ namespace Conditus.DynamoDBMapper.Mappers
 
         private static AttributeValue GetEnumerableAttributeValue(PropertyInfo propertyInfo, object propertyValue)
         {
-            var enumerablePropertyValue = (IEnumerable) propertyValue;
+            var enumerablePropertyValue = (IEnumerable)propertyValue;
 
             if (IsMapList(propertyInfo))
                 return enumerablePropertyValue.GetMapAttributeValue();
 
-            return new AttributeValue{S = JsonSerializer.Serialize(propertyValue)};
+            return new AttributeValue { S = JsonSerializer.Serialize(propertyValue) };
         }
 
         private static bool IsMapList(PropertyInfo propertyInfo)
