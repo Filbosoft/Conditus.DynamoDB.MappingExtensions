@@ -13,7 +13,7 @@ namespace Conditus.DynamoDBMapper.Mappers
         public static AttributeValue GetMapAttributeValue(this IEnumerable enumerable)
         {
             var attributeMap = enumerable.GetAttributeValueMap();
-            
+
             if (attributeMap == null)
                 return null;
 
@@ -24,7 +24,7 @@ namespace Conditus.DynamoDBMapper.Mappers
         {
             var list = enumerable.Cast<object>()
                 .ToList<object>();
-            
+
             if (list.Count == 0)
                 return null;
 
@@ -69,19 +69,23 @@ namespace Conditus.DynamoDBMapper.Mappers
                 .ToList();
         }
 
-        public static List<object> ToEntityList(this Dictionary<string, AttributeValue> map, Type elementType)
+        public static IList ToEntityList(this Dictionary<string, AttributeValue> map, Type elementType)
         {
+            var listType = typeof(List<>).MakeGenericType(elementType);
+            var listInstance = Activator.CreateInstance(listType);
+            var entityList = (IList)listInstance;
+
             if (map.Count == 0)
-                return new List<object>();
-            
+                return entityList;
+
             var attributeValues = map
                 .Select(m => m.Value);
 
             if (!attributeValues.First().IsMSet)
                 throw new NotImplementedException();
-            
-            var entityList = attributeValues.Select(v => v.M.ToEntity(elementType))
-                .ToList();
+
+            foreach (var attribute in attributeValues)
+                entityList.Add(attribute.M.ToEntity(elementType));
 
             return entityList;
         }
