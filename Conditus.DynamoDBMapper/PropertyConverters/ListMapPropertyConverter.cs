@@ -20,7 +20,7 @@ namespace Conditus.DynamoDBMapper.PropertyConverters
     * The reason it's not in a List (DynamoDBType: L) is because it isn't possible to index inside a List
     * but it is on a map.
     * 
-    * Sources of knowledge:
+    * Sources:
     * - https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBContext.ArbitraryDataMapping.html
     ***/
     public class ListMapPropertyConverter<T> : IPropertyConverter
@@ -51,7 +51,8 @@ namespace Conditus.DynamoDBMapper.PropertyConverters
         }
 
         /***
-        * For some reason will the this not work, as it won't take a non scalar attribute type
+        * IDynamoDBContext doesn't support list or map values unfortunately.
+        * Supported types: https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DotNetSDKHighLevel.html#DotNetDynamoDBContext.SupportedTypes
         ***/
         // public DynamoDBEntry ToEntry(object value)
         // {

@@ -5,6 +5,14 @@ using Conditus.DynamoDBMapper.Mappers;
 
 namespace Conditus.DynamoDBMapper.PropertyConverters
 {
+    /***
+    * DateTimePropertyConverter:
+    * This converter converts DateTime properties to UTC Epoch and vice versa.
+    *
+    * Use cases:
+    * - As DynamoDB sorts string attributes alphabetically, having the datetime as a number attribute 
+    *   will allow for faster searches and correct sorting.
+    ***/
     public class DateTimePropertyConverter : IPropertyConverter
     {
         public object FromEntry(DynamoDBEntry entry)
