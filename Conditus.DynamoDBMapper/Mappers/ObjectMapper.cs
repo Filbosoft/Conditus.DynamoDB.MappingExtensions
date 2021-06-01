@@ -14,6 +14,31 @@ namespace Conditus.DynamoDBMapper.Mappers
         public static AttributeValue GetAttributeValue(this object obj)
             => new AttributeValue { S = obj.ToString() };
 
+        public static AttributeValue GetAttributeValue(this object obj, Type type)
+        {
+            if (obj == null) return null;
+
+            if (type == typeof(string))
+                return ((string)obj).GetAttributeValue();
+
+            if (type == typeof(int))
+                return ((int)obj).GetAttributeValue();
+
+            if (type == typeof(long))
+                return ((long)obj).GetAttributeValue();
+
+            if (type == typeof(decimal))
+                return ((decimal)obj).GetAttributeValue();
+
+            if (type == typeof(DateTime))
+                return ((DateTime)obj).GetAttributeValue();
+
+            if (type.IsEnum)
+                return ((Enum)obj).GetAttributeValue();
+
+            return new AttributeValue { M = GetAttributeValueMap(obj) };
+        }
+
         public static AttributeValue GetMapAttributeValue(this object obj)
             => new AttributeValue { M = GetAttributeValueMap(obj) };
 
@@ -32,7 +57,7 @@ namespace Conditus.DynamoDBMapper.Mappers
             return map;
         }
 
-        private static AttributeValue GetPropertyAttributeValue(PropertyInfo propertyInfo, object obj)
+        public static AttributeValue GetPropertyAttributeValue(PropertyInfo propertyInfo, object obj)
         {
             var type = propertyInfo.PropertyType;
             var value = propertyInfo.GetValue(obj);
