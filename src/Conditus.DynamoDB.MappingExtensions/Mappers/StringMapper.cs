@@ -1,6 +1,6 @@
 using Amazon.DynamoDBv2.Model;
 
-namespace Conditus.DynamoDBMapper.Mappers
+namespace Conditus.DynamoDB.MappingExtensions.Mappers
 {
     public static class StringMapper
     {

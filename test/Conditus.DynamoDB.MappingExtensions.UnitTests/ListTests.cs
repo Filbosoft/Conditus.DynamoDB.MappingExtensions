@@ -2,20 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using Amazon.DynamoDBv2.DataModel;
 using Amazon.DynamoDBv2.Model;
-using Conditus.DynamoDBMapper.Attributes;
-using Conditus.DynamoDBMapper.Mappers;
+using Conditus.DynamoDB.MappingExtensions.Attributes;
+using Conditus.DynamoDB.MappingExtensions.Mappers;
 using FluentAssertions;
 using Xunit;
 
-namespace Conditus.DynamoDBMapper.Tests
+namespace Conditus.DynamoDB.MappingExtensions.UnitTests
 {
-    public class IEnumerableTests
+    public class ListTests
     {
-        private class ClassWithNestedIEnumerable
+        private class ClassWithNestedListMap
         {
             public string Name { get; set; }
             [MapList]
-            public IEnumerable<NestedItem> NestedItems { get; set; }
+            public List<NestedItem> NestedItems { get; set; }
         }
 
         private class NestedItem
@@ -36,7 +36,7 @@ namespace Conditus.DynamoDBMapper.Tests
                 StringProp = "stringProp",
                 LongProp = 1000
             };
-            var testObject = new ClassWithNestedIEnumerable
+            var testObject = new ClassWithNestedListMap
             {
                 Name = "Test",
                 NestedItems = new List<NestedItem>
@@ -76,7 +76,7 @@ namespace Conditus.DynamoDBMapper.Tests
         public void GetAttributeValueMap_WithEntityWithEmptyList_ShouldReturnMapWithoutValueForTheEmptyProperty()
         {
             //Given
-            var testObject = new ClassWithNestedIEnumerable
+            var testObject = new ClassWithNestedListMap
             {
                 Name = "Test",
                 NestedItems = new List<NestedItem>()
@@ -86,7 +86,7 @@ namespace Conditus.DynamoDBMapper.Tests
             var attributeValueMap = testObject.GetAttributeValueMap();
 
             //Then
-            attributeValueMap.Should().NotContainKey(nameof(ClassWithNestedIEnumerable.NestedItems));
+            attributeValueMap.Should().NotContainKey(nameof(ClassWithNestedListMap.NestedItems));
         }
 
         [Fact]
@@ -128,7 +128,7 @@ namespace Conditus.DynamoDBMapper.Tests
                 StringProp = "stringProp",
                 LongProp = 100
             };
-            var element = new ClassWithNestedIEnumerable
+            var element = new ClassWithNestedListMap
             {
                 Name = "el",
                 NestedItems = new List<NestedItem> { nestedElement }
@@ -146,12 +146,12 @@ namespace Conditus.DynamoDBMapper.Tests
             };
             var elementMap = new Dictionary<string, AttributeValue>
             {
-                {nameof(ClassWithNestedIEnumerable.Name), new AttributeValue{S = element.Name}},
-                {nameof(ClassWithNestedIEnumerable.NestedItems), new AttributeValue{M = listMap}}
+                {nameof(ClassWithNestedListMap.Name), new AttributeValue{S = element.Name}},
+                {nameof(ClassWithNestedListMap.NestedItems), new AttributeValue{M = listMap}}
             };
 
             //When
-            var entity = elementMap.ToEntity<ClassWithNestedIEnumerable>();
+            var entity = elementMap.ToEntity<ClassWithNestedListMap>();
 
             //Then
             entity.Should().NotBeNull()

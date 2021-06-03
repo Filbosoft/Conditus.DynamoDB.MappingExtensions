@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Conditus.DynamoDBMapper\Conditus.DynamoDBMapper.csproj" />
+    <ProjectReference Include="..\..\src\Conditus.DynamoDB.MappingExtensions\Conditus.DynamoDB.MappingExtensions.csproj" />
   </ItemGroup>
 
 </Project>

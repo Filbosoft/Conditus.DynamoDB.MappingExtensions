@@ -5,9 +5,9 @@ using System.Linq;
 using System.Reflection;
 using System.Text.Json;
 using Amazon.DynamoDBv2.Model;
-using Conditus.DynamoDBMapper.Attributes;
+using Conditus.DynamoDB.MappingExtensions.Attributes;
 
-namespace Conditus.DynamoDBMapper.Mappers
+namespace Conditus.DynamoDB.MappingExtensions.Mappers
 {
     public static class ObjectMapper
     {

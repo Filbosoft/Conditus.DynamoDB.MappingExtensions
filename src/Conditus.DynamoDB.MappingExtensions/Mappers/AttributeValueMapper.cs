@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Amazon.DynamoDBv2.Model;
-using Conditus.DynamoDBMapper.Attributes;
+using Conditus.DynamoDB.MappingExtensions.Attributes;
 
-namespace Conditus.DynamoDBMapper.Mappers
+namespace Conditus.DynamoDB.MappingExtensions.Mappers
 {
     public static class AttributeValueMapper
     {

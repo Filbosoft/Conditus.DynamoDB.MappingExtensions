@@ -1,0 +1,56 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.6.30114.105
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{7D94964A-B3F3-4A7C-80E5-58B3A8A39D44}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conditus.DynamoDB.MappingExtensions", "src\Conditus.DynamoDB.MappingExtensions\Conditus.DynamoDB.MappingExtensions.csproj", "{9D3FAA0E-50A5-4A23-BC58-83AB9907F509}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{A4AF4FBB-B1A6-4E8A-9557-F511F6EE74FD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conditus.DynamoDB.MappingExtensions.UnitTests", "test\Conditus.DynamoDB.MappingExtensions.UnitTests\Conditus.DynamoDB.MappingExtensions.UnitTests.csproj", "{D589E400-7D78-4284-B956-9A5EBB72D9BD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9D3FAA0E-50A5-4A23-BC58-83AB9907F509}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D3FAA0E-50A5-4A23-BC58-83AB9907F509}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D3FAA0E-50A5-4A23-BC58-83AB9907F509}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{9D3FAA0E-50A5-4A23-BC58-83AB9907F509}.Debug|x64.Build.0 = Debug|Any CPU
+		{9D3FAA0E-50A5-4A23-BC58-83AB9907F509}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9D3FAA0E-50A5-4A23-BC58-83AB9907F509}.Debug|x86.Build.0 = Debug|Any CPU
+		{9D3FAA0E-50A5-4A23-BC58-83AB9907F509}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D3FAA0E-50A5-4A23-BC58-83AB9907F509}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D3FAA0E-50A5-4A23-BC58-83AB9907F509}.Release|x64.ActiveCfg = Release|Any CPU
+		{9D3FAA0E-50A5-4A23-BC58-83AB9907F509}.Release|x64.Build.0 = Release|Any CPU
+		{9D3FAA0E-50A5-4A23-BC58-83AB9907F509}.Release|x86.ActiveCfg = Release|Any CPU
+		{9D3FAA0E-50A5-4A23-BC58-83AB9907F509}.Release|x86.Build.0 = Release|Any CPU
+		{D589E400-7D78-4284-B956-9A5EBB72D9BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D589E400-7D78-4284-B956-9A5EBB72D9BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D589E400-7D78-4284-B956-9A5EBB72D9BD}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D589E400-7D78-4284-B956-9A5EBB72D9BD}.Debug|x64.Build.0 = Debug|Any CPU
+		{D589E400-7D78-4284-B956-9A5EBB72D9BD}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D589E400-7D78-4284-B956-9A5EBB72D9BD}.Debug|x86.Build.0 = Debug|Any CPU
+		{D589E400-7D78-4284-B956-9A5EBB72D9BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D589E400-7D78-4284-B956-9A5EBB72D9BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D589E400-7D78-4284-B956-9A5EBB72D9BD}.Release|x64.ActiveCfg = Release|Any CPU
+		{D589E400-7D78-4284-B956-9A5EBB72D9BD}.Release|x64.Build.0 = Release|Any CPU
+		{D589E400-7D78-4284-B956-9A5EBB72D9BD}.Release|x86.ActiveCfg = Release|Any CPU
+		{D589E400-7D78-4284-B956-9A5EBB72D9BD}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9D3FAA0E-50A5-4A23-BC58-83AB9907F509} = {7D94964A-B3F3-4A7C-80E5-58B3A8A39D44}
+		{D589E400-7D78-4284-B956-9A5EBB72D9BD} = {A4AF4FBB-B1A6-4E8A-9557-F511F6EE74FD}
+	EndGlobalSection
+EndGlobal

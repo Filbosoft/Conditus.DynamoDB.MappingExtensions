@@ -1,9 +1,9 @@
 using System;
 using Amazon.DynamoDBv2.DataModel;
 using Amazon.DynamoDBv2.DocumentModel;
-using Conditus.DynamoDBMapper.Mappers;
+using Conditus.DynamoDB.MappingExtensions.Mappers;
 
-namespace Conditus.DynamoDBMapper.PropertyConverters
+namespace Conditus.DynamoDB.MappingExtensions.PropertyConverters
 {
     /***
     * DateTimePropertyConverter:

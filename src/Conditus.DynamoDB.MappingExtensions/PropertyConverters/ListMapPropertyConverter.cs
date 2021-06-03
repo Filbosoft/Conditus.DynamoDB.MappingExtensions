@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Amazon.DynamoDBv2.DataModel;
 using Amazon.DynamoDBv2.DocumentModel;
-using Conditus.DynamoDBMapper.Mappers;
+using Conditus.DynamoDB.MappingExtensions.Mappers;
 
-namespace Conditus.DynamoDBMapper.PropertyConverters
+namespace Conditus.DynamoDB.MappingExtensions.PropertyConverters
 {
     /***
     * This property converter converts a DynamoDB entry of type Map<string, Map> (DynamoDBTypes: S & M)
