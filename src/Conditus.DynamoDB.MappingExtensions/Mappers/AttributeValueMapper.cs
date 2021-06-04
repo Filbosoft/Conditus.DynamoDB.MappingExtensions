@@ -40,8 +40,7 @@ namespace Conditus.DynamoDB.MappingExtensions.Mappers
 
         public static AttributeValue GetAttributeValue(this Dictionary<string, AttributeValue> attributeMap, string key)
         {
-            AttributeValue attributeValue;
-            attributeMap.TryGetValue(key, out attributeValue);
+            attributeMap.TryGetValue(key, out AttributeValue attributeValue);
 
             return attributeValue;
         }
@@ -72,6 +71,9 @@ namespace Conditus.DynamoDB.MappingExtensions.Mappers
                 return ListMapper.ToEntityList(
                     attributeValue.M,
                     propertyType.GetGenericArguments().First());
+
+            if (propertyInfo.GetCustomAttribute(typeof(DynamoDBSelfContainingCompositeKeyAttribute)) != null)
+                return CompositeKeyMapper.ToEntity(attributeValue, propertyType);
 
             if (attributeValue.IsMSet)
                 return attributeValue.M.ToEntity(propertyType);

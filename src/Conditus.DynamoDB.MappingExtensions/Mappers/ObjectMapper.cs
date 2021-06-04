@@ -85,6 +85,9 @@ namespace Conditus.DynamoDB.MappingExtensions.Mappers
             if (value is IEnumerable)
                 return GetEnumerableAttributeValue(propertyInfo, value);
 
+            if (IsSelfContainingCompositeKey(propertyInfo))
+                return CompositeKeyMapper.GetSelfContainingCompositeKeyAttributeValue(value, propertyInfo.Name);
+
             return new AttributeValue { M = GetAttributeValueMap(value) };
         }
 
@@ -100,5 +103,7 @@ namespace Conditus.DynamoDB.MappingExtensions.Mappers
 
         private static bool IsMapList(PropertyInfo propertyInfo)
             => propertyInfo.GetCustomAttribute(typeof(DynamoDBMapListAttribute), false) != null;
+        private static bool IsSelfContainingCompositeKey(PropertyInfo propertyInfo)
+            => propertyInfo.GetCustomAttribute(typeof(DynamoDBSelfContainingCompositeKeyAttribute), false) != null;
     }
 }

@@ -30,7 +30,7 @@ namespace Conditus.DynamoDB.MappingExtensions.Mappers
 
             var map = new Dictionary<string, AttributeValue>();
             var firstItem = list.FirstOrDefault();
-            var idProperty = GetIdProperty(firstItem);
+            var idProperty = GetHashProperty(firstItem);
 
             foreach (var item in list)
             {
@@ -43,22 +43,18 @@ namespace Conditus.DynamoDB.MappingExtensions.Mappers
             return map;
         }
 
-        public static PropertyInfo GetIdProperty(object obj)
+        public static PropertyInfo GetHashProperty(object obj)
         {
             var properties = obj.GetType().GetProperties();
             var hashKey = properties
                 .FirstOrDefault(p => p.GetCustomAttribute(typeof(DynamoDBHashKeyAttribute), true) != null);
 
-            if (hashKey != null)
-                return hashKey;
+            if (hashKey == null)
+                throw new ArgumentException(
+                    "No DynamoDBHashKeyProperty defined on the passed entity",
+                    nameof(obj));
 
-            var idProperty = properties
-                .FirstOrDefault(p => p.Name.ToUpper().Equals("ID"));
-
-            if (idProperty == null)
-                throw new ArgumentOutOfRangeException("obj", "The object did not have a hashkey or an id property");
-
-            return idProperty;
+            return hashKey;
         }
 
         public static List<T> ToEntityList<T>(this Dictionary<string, AttributeValue> map)
