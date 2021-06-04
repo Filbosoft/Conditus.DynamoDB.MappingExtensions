@@ -99,6 +99,6 @@ namespace Conditus.DynamoDB.MappingExtensions.Mappers
         }
 
         private static bool IsMapList(PropertyInfo propertyInfo)
-            => propertyInfo.GetCustomAttribute(typeof(MapListAttribute), false) != null;
+            => propertyInfo.GetCustomAttribute(typeof(DynamoDBMapListAttribute), false) != null;
     }
 }

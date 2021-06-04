@@ -14,7 +14,7 @@ namespace Conditus.DynamoDB.MappingExtensions.UnitTests
         private class ClassWithNestedListMap
         {
             public string Name { get; set; }
-            [MapList]
+            [DynamoDBMapList]
             public List<NestedItem> NestedItems { get; set; }
         }
 

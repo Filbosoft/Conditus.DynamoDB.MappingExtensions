@@ -68,7 +68,7 @@ namespace Conditus.DynamoDB.MappingExtensions.Mappers
             if (propertyType == typeof(DateTime) || propertyType == typeof(DateTime?))
                 return DateTimeMapper.FromUtcUnixTimeMilliseconds(attributeValue.N);
 
-            if (propertyInfo.GetCustomAttribute(typeof(MapListAttribute)) != null)
+            if (propertyInfo.GetCustomAttribute(typeof(DynamoDBMapListAttribute)) != null)
                 return ListMapper.ToEntityList(
                     attributeValue.M,
                     propertyType.GetGenericArguments().First());
