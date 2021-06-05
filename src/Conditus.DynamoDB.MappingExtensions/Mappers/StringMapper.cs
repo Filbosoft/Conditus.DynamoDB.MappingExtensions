@@ -8,14 +8,14 @@ namespace Conditus.DynamoDB.MappingExtensions.Mappers
         public static AttributeValue GetAttributeValue(this string value)
             => new AttributeValue { S = value };
 
-        public static T ConvertToScalarType<T>(string value)
+        public static T ConvertToType<T>(string value)
         {
             var type = typeof(T);
 
-            return (T)ConvertToScalarType(value, type);
+            return (T)ConvertToType(value, type);
         }
 
-        public static object ConvertToScalarType(string value, Type type)
+        public static object ConvertToType(string value, Type type)
         {
             if (type == typeof(string))
                 return Convert.ChangeType(value, type);
@@ -35,11 +35,16 @@ namespace Conditus.DynamoDB.MappingExtensions.Mappers
             if (type == typeof(DateTime) || type == typeof(DateTime?))
                 return DateTimeMapper.FromUtcUnixTimeMilliseconds(value);
 
-            throw new NotImplementedException("Conversion to the provided value isn't supported");
+            throw new NotImplementedException($"Conversion to {type.FullName} isn't supported");
         }
 
-        public static string ConvertToString(object value, Type type)
+        public static string ConvertToDynamoDBStringValue(object value)
         {
+            if (value == null)
+                return "";
+                
+            var type = value.GetType();
+
             if (type == typeof(string)
                 || type == typeof(int)
                 || type == typeof(long)
@@ -50,7 +55,7 @@ namespace Conditus.DynamoDB.MappingExtensions.Mappers
             if (type == typeof(DateTime) || type == typeof(DateTime?))
                 return DateTimeMapper.ToUtcUnixTimeMilliseconds((DateTime)value).ToString();
 
-            throw new NotImplementedException("Conversion to the provided value isn't supported");
+            throw new NotImplementedException($"Conversion from {type.FullName} isn't supported");
         }
     }
 }

@@ -1,10 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using Amazon.DynamoDBv2.Model;
-using System.Linq;
 using System.Reflection;
-using Amazon.DynamoDBv2.DataModel;
 using Conditus.DynamoDB.MappingExtensions.Attributes;
 
 namespace Conditus.DynamoDB.MappingExtensions.Mappers
@@ -49,14 +46,14 @@ namespace Conditus.DynamoDB.MappingExtensions.Mappers
 
             var resultingKeys = new List<string>();
             var propertyValue = compositeKeyProperty.GetValue(entity);
-            var propertyStringValue = StringMapper.ConvertToString(propertyValue, compositeKeyProperty.PropertyType);
+            var propertyStringValue = StringMapper.ConvertToDynamoDBStringValue(propertyValue);
 
             resultingKeys.Insert(0, propertyStringValue);
             foreach (var key in compositeKeyKeys)
             {
                 var keyProperty = entityType.GetProperty(key);
                 var keyPropertyValue = keyProperty.GetValue(entity);
-                var keyStringValue = StringMapper.ConvertToString(keyPropertyValue, keyProperty.PropertyType);
+                var keyStringValue = StringMapper.ConvertToDynamoDBStringValue(keyPropertyValue);
 
                 resultingKeys.Add(keyStringValue);
             }
@@ -74,7 +71,7 @@ namespace Conditus.DynamoDB.MappingExtensions.Mappers
         {
             var compositeKey = attributeValue.S;
             var keyParts = compositeKey.Split(KEY_SEPARATOR);
-            var entity = StringMapper.ConvertToScalarType(keyParts[0], type);
+            var entity = StringMapper.ConvertToType(keyParts[0], type);
 
             return entity;
         }

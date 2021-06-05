@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Conditus.DynamoDB.MappingExtensions.Mappers;
 using Conditus.DynamoDB.MappingExtensions.UnitTests.MapperTests.CompositeKeyMapperTests.TestClasses;
 using FluentAssertions;
@@ -36,7 +35,7 @@ namespace Conditus.DynamoDB.MappingExtensions.UnitTests.MapperTests.CompositeKey
         }
 
         [Fact]
-        public void GetSelfContainingCompositeKey_WithDateTimeAndString_ShouldReturnCompositeKeyOfTheStringValueOfTheKeyProperties()
+        public void GetSelfContainingCompositeKey_WithDateTimePropertyAndStringKeys_ShouldReturnCompositeKeyOfTheStringValueOfTheKeyProperties()
         {
             //Given
             var entity = new ClassWithSelfContainingCompositeDateTimeKey
@@ -52,9 +51,61 @@ namespace Conditus.DynamoDB.MappingExtensions.UnitTests.MapperTests.CompositeKey
             //Then
             var expectedKeyParts = new string[]
             {
-                StringMapper.ConvertToString(entity.SelfContainingCompositeKey, entity.SelfContainingCompositeKey.GetType()),
+                StringMapper.ConvertToDynamoDBStringValue(entity.SelfContainingCompositeKey),
                 entity.KeyProperty1,
                 entity.KeyProperty2
+            };
+            var expectedCompositeKey = string.Join(CompositeKeyMapper.KEY_SEPARATOR, expectedKeyParts);
+            
+            compositeKey.Should().Be(expectedCompositeKey);
+        }
+
+        [Fact]
+        public void GetSelfContainingCompositeKey_WithStringPropertyAndDateTimeKey_ShouldReturnCompositeKeyOfTheStringValueOfTheKeyProperties()
+        {
+            //Given
+            var entity = new ClassWithSelfContainingCompositeStringKeyIncludingDateTimeKey
+            {
+                SelfContainingCompositeKey = "PropertyValue",
+                DateTimeKeyProperty1 = DateTime.UtcNow,
+                KeyProperty2 = "Key2Value"
+            };
+
+            //When
+            var compositeKey = CompositeKeyMapper.GetSelfContainingCompositeKey(entity, nameof(ClassWithSelfContainingCompositeStringKey.SelfContainingCompositeKey));
+
+            //Then
+            var expectedKeyParts = new string[]
+            {
+                entity.SelfContainingCompositeKey,
+                StringMapper.ConvertToDynamoDBStringValue(entity.DateTimeKeyProperty1),
+                entity.KeyProperty2
+            };
+            var expectedCompositeKey = string.Join(CompositeKeyMapper.KEY_SEPARATOR, expectedKeyParts);
+            
+            compositeKey.Should().Be(expectedCompositeKey);
+        }
+
+        [Fact]
+        public void GetSelfContainingCompositeKey_WithNullableKeys_ShouldReturnCompositeKeyOfTheStringValueOfTheKeyProperties()
+        {
+            //Given
+            var entity = new ClassWithSelfContainingCompositeNullableKeys
+            {
+                SelfContainingCompositeKey = "PropertyValue",
+                DateTimeKeyProperty1 = DateTime.UtcNow,
+                IntProperty1 = 1
+            };
+
+            //When
+            var compositeKey = CompositeKeyMapper.GetSelfContainingCompositeKey(entity, nameof(ClassWithSelfContainingCompositeStringKey.SelfContainingCompositeKey));
+
+            //Then
+            var expectedKeyParts = new string[]
+            {
+                entity.SelfContainingCompositeKey,
+                StringMapper.ConvertToDynamoDBStringValue(entity.DateTimeKeyProperty1),
+                entity.IntProperty1.ToString()
             };
             var expectedCompositeKey = string.Join(CompositeKeyMapper.KEY_SEPARATOR, expectedKeyParts);
             
