@@ -29,7 +29,7 @@ namespace Conditus.DynamoDB.MappingExtensions.Mappers
             if (type == typeof(decimal))
                 return ((decimal)obj).GetAttributeValue();
 
-            if (type == typeof(DateTime))
+            if (type == typeof(DateTime) || type == typeof(DateTime?))
                 return ((DateTime)obj).GetAttributeValue();
 
             if (type.IsEnum)
@@ -78,7 +78,7 @@ namespace Conditus.DynamoDB.MappingExtensions.Mappers
             if (type == typeof(decimal))
                 return ((decimal)value).GetAttributeValue();
 
-            if (type == typeof(DateTime))
+            if (type == typeof(DateTime) || type == typeof(DateTime?))
                 return ((DateTime)value).GetAttributeValue();
 
             if (type.IsEnum)
