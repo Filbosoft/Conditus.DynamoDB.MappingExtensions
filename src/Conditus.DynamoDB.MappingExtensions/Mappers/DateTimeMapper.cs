@@ -18,7 +18,8 @@ namespace Conditus.DynamoDB.MappingExtensions.Mappers
 
         public static long ToUtcUnixTimeMilliseconds(this DateTime dateTime)
         {
-            var offset = new DateTimeOffset(dateTime, new TimeSpan());
+            var utcDate = DateTime.SpecifyKind(dateTime, DateTimeKind.Utc);
+            var offset = new DateTimeOffset(utcDate, new TimeSpan());
             var unixTime = offset.ToUnixTimeMilliseconds();
 
             return unixTime;
