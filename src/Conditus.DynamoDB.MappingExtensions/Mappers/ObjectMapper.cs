@@ -86,7 +86,7 @@ namespace Conditus.DynamoDB.MappingExtensions.Mappers
                 return GetEnumerableAttributeValue(propertyInfo, value);
 
             if (IsSelfContainingCompositeKey(propertyInfo))
-                return CompositeKeyMapper.GetSelfContainingCompositeKeyAttributeValue(value, propertyInfo.Name);
+                return SelfContainingCompositeKeyMapper.GetSelfContainingCompositeKeyAttributeValue(value, propertyInfo.Name);
 
             return new AttributeValue { M = GetAttributeValueMap(value) };
         }

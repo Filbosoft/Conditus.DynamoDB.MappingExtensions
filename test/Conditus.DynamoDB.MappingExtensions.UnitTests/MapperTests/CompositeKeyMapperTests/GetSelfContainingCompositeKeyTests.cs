@@ -4,6 +4,8 @@ using Conditus.DynamoDB.MappingExtensions.UnitTests.MapperTests.CompositeKeyMapp
 using FluentAssertions;
 using Xunit;
 
+using static Conditus.DynamoDB.MappingExtensions.Constants.MappingConstants;
+
 namespace Conditus.DynamoDB.MappingExtensions.UnitTests.MapperTests.CompositeKeyMapperTests
 {
     public class GetSelfContainingCompositeKeyTests
@@ -20,7 +22,7 @@ namespace Conditus.DynamoDB.MappingExtensions.UnitTests.MapperTests.CompositeKey
             };
 
             //When
-            var compositeKey = CompositeKeyMapper.GetSelfContainingCompositeKey(entity, nameof(ClassWithSelfContainingCompositeStringKey.SelfContainingCompositeKey));
+            var compositeKey = SelfContainingCompositeKeyMapper.GetSelfContainingCompositeKey(entity, nameof(ClassWithSelfContainingCompositeStringKey.SelfContainingCompositeKey));
 
             //Then
             var expectedKeyParts = new string[]
@@ -29,7 +31,7 @@ namespace Conditus.DynamoDB.MappingExtensions.UnitTests.MapperTests.CompositeKey
                 entity.KeyProperty1,
                 entity.KeyProperty2
             };
-            var expectedCompositeKey = string.Join(CompositeKeyMapper.KEY_SEPARATOR, expectedKeyParts);
+            var expectedCompositeKey = string.Join(COMPOSITE_KEY_SEPARATOR, expectedKeyParts);
 
             compositeKey.Should().Be(expectedCompositeKey);
         }
@@ -46,7 +48,7 @@ namespace Conditus.DynamoDB.MappingExtensions.UnitTests.MapperTests.CompositeKey
             };
 
             //When
-            var compositeKey = CompositeKeyMapper.GetSelfContainingCompositeKey(entity, nameof(ClassWithSelfContainingCompositeStringKey.SelfContainingCompositeKey));
+            var compositeKey = SelfContainingCompositeKeyMapper.GetSelfContainingCompositeKey(entity, nameof(ClassWithSelfContainingCompositeStringKey.SelfContainingCompositeKey));
 
             //Then
             var expectedKeyParts = new string[]
@@ -55,7 +57,7 @@ namespace Conditus.DynamoDB.MappingExtensions.UnitTests.MapperTests.CompositeKey
                 entity.KeyProperty1,
                 entity.KeyProperty2
             };
-            var expectedCompositeKey = string.Join(CompositeKeyMapper.KEY_SEPARATOR, expectedKeyParts);
+            var expectedCompositeKey = string.Join(COMPOSITE_KEY_SEPARATOR, expectedKeyParts);
             
             compositeKey.Should().Be(expectedCompositeKey);
         }
@@ -72,7 +74,7 @@ namespace Conditus.DynamoDB.MappingExtensions.UnitTests.MapperTests.CompositeKey
             };
 
             //When
-            var compositeKey = CompositeKeyMapper.GetSelfContainingCompositeKey(entity, nameof(ClassWithSelfContainingCompositeStringKey.SelfContainingCompositeKey));
+            var compositeKey = SelfContainingCompositeKeyMapper.GetSelfContainingCompositeKey(entity, nameof(ClassWithSelfContainingCompositeStringKey.SelfContainingCompositeKey));
 
             //Then
             var expectedKeyParts = new string[]
@@ -81,7 +83,7 @@ namespace Conditus.DynamoDB.MappingExtensions.UnitTests.MapperTests.CompositeKey
                 StringMapper.ConvertToDynamoDBStringValue(entity.DateTimeKeyProperty1),
                 entity.KeyProperty2
             };
-            var expectedCompositeKey = string.Join(CompositeKeyMapper.KEY_SEPARATOR, expectedKeyParts);
+            var expectedCompositeKey = string.Join(COMPOSITE_KEY_SEPARATOR, expectedKeyParts);
             
             compositeKey.Should().Be(expectedCompositeKey);
         }
@@ -98,7 +100,7 @@ namespace Conditus.DynamoDB.MappingExtensions.UnitTests.MapperTests.CompositeKey
             };
 
             //When
-            var compositeKey = CompositeKeyMapper.GetSelfContainingCompositeKey(entity, nameof(ClassWithSelfContainingCompositeStringKey.SelfContainingCompositeKey));
+            var compositeKey = SelfContainingCompositeKeyMapper.GetSelfContainingCompositeKey(entity, nameof(ClassWithSelfContainingCompositeStringKey.SelfContainingCompositeKey));
 
             //Then
             var expectedKeyParts = new string[]
@@ -107,7 +109,7 @@ namespace Conditus.DynamoDB.MappingExtensions.UnitTests.MapperTests.CompositeKey
                 StringMapper.ConvertToDynamoDBStringValue(entity.DateTimeKeyProperty1),
                 entity.IntProperty1.ToString()
             };
-            var expectedCompositeKey = string.Join(CompositeKeyMapper.KEY_SEPARATOR, expectedKeyParts);
+            var expectedCompositeKey = string.Join(COMPOSITE_KEY_SEPARATOR, expectedKeyParts);
             
             compositeKey.Should().Be(expectedCompositeKey);
         }

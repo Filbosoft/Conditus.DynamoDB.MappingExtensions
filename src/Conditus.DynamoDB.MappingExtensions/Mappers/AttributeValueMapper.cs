@@ -73,7 +73,7 @@ namespace Conditus.DynamoDB.MappingExtensions.Mappers
                     propertyType.GetGenericArguments().First());
 
             if (propertyInfo.GetCustomAttribute(typeof(DynamoDBSelfContainingCompositeKeyAttribute)) != null)
-                return CompositeKeyMapper.ToEntity(attributeValue, propertyType);
+                return SelfContainingCompositeKeyMapper.SelfContainingCompositeKeyToEntity(attributeValue, propertyType);
 
             if (attributeValue.IsMSet)
                 return attributeValue.M.ToEntity(propertyType);
