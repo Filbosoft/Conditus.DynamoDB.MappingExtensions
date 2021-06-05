@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Text.Json;
 using Amazon.DynamoDBv2.Model;
@@ -64,6 +63,9 @@ namespace Conditus.DynamoDB.MappingExtensions.Mappers
 
             if (value == null) return null;
 
+            if (IsSelfContainingCompositeKey(propertyInfo))
+                return SelfContainingCompositeKeyMapper.GetSelfContainingCompositeKeyAttributeValue(obj, propertyInfo.Name);
+
             if (type == typeof(string))
                 return ((string)value).GetAttributeValue();
 
@@ -84,9 +86,6 @@ namespace Conditus.DynamoDB.MappingExtensions.Mappers
 
             if (value is IEnumerable)
                 return GetEnumerableAttributeValue(propertyInfo, value);
-
-            if (IsSelfContainingCompositeKey(propertyInfo))
-                return SelfContainingCompositeKeyMapper.GetSelfContainingCompositeKeyAttributeValue(value, propertyInfo.Name);
 
             return new AttributeValue { M = GetAttributeValueMap(value) };
         }

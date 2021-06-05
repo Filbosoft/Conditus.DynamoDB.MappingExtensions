@@ -49,6 +49,9 @@ namespace Conditus.DynamoDB.MappingExtensions.Mappers
         {
             var propertyType = propertyInfo.PropertyType;
 
+            if (propertyInfo.GetCustomAttribute(typeof(DynamoDBSelfContainingCompositeKeyAttribute)) != null)
+                return SelfContainingCompositeKeyMapper.SelfContainingCompositeKeyToEntity(attributeValue, propertyType);
+
             if (propertyType == typeof(string))
                 return attributeValue.S;
 
@@ -71,9 +74,6 @@ namespace Conditus.DynamoDB.MappingExtensions.Mappers
                 return ListMapper.ToEntityList(
                     attributeValue.M,
                     propertyType.GetGenericArguments().First());
-
-            if (propertyInfo.GetCustomAttribute(typeof(DynamoDBSelfContainingCompositeKeyAttribute)) != null)
-                return SelfContainingCompositeKeyMapper.SelfContainingCompositeKeyToEntity(attributeValue, propertyType);
 
             if (attributeValue.IsMSet)
                 return attributeValue.M.ToEntity(propertyType);

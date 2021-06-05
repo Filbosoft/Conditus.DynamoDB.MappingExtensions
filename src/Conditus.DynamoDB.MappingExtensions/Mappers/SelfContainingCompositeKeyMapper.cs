@@ -34,7 +34,7 @@ namespace Conditus.DynamoDB.MappingExtensions.Mappers
             foreach (var key in compositeKeyKeys)
                 keyProperties.Add(entityType.GetProperty(key));
 
-            var keyValues = keyProperties.Select(kp => 
+            var keyValues = keyProperties.Select(kp =>
             {
                 var keyPropertyValue = kp.GetValue(entity);
 
@@ -47,7 +47,7 @@ namespace Conditus.DynamoDB.MappingExtensions.Mappers
         public static T SelfContainingCompositeKeyToEntity<T>(AttributeValue attributeValue)
         {
             var entityType = typeof(T);
-            return (T) SelfContainingCompositeKeyToEntity(attributeValue, entityType);
+            return (T)SelfContainingCompositeKeyToEntity(attributeValue, entityType);
         }
 
         public static object SelfContainingCompositeKeyToEntity(AttributeValue attributeValue, Type type)
@@ -57,6 +57,14 @@ namespace Conditus.DynamoDB.MappingExtensions.Mappers
             var entity = StringMapper.ConvertToType(keyParts[0], type);
 
             return entity;
+        }
+
+        public static AttributeValue GetSelfContainingCompositeKeyQueryAttributeValue(this object value)
+        {
+            var stringValue = StringMapper.ConvertToDynamoDBStringValue(value);
+            var query = stringValue + COMPOSITE_KEY_SEPARATOR;
+
+            return new AttributeValue { S = query };
         }
     }
 }
