@@ -48,9 +48,11 @@ namespace Conditus.DynamoDB.MappingExtensions.Mappers
             if (type == typeof(string)
                 || type == typeof(int)
                 || type == typeof(long)
-                || type == typeof(decimal)
-                || type.IsEnum)
+                || type == typeof(decimal))
                 return value.ToString();
+            
+            if (type.IsEnum)
+                return Convert.ToUInt32(value).ToString();
 
             if (type == typeof(DateTime) || type == typeof(DateTime?))
                 return DateTimeMapper.ToUtcUnixTimeMilliseconds((DateTime)value).ToString();
