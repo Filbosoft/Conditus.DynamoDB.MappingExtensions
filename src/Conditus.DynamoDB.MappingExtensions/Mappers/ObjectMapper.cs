@@ -58,13 +58,16 @@ namespace Conditus.DynamoDB.MappingExtensions.Mappers
 
         public static AttributeValue GetPropertyAttributeValue(PropertyInfo propertyInfo, object obj)
         {
-            var type = propertyInfo.PropertyType;
-            var value = propertyInfo.GetValue(obj);
+            if (AttributeChecker.IsCompositeKey(propertyInfo))
+                return CompositeKeyMapper.GetCompositeKeyAttributeValue(obj, propertyInfo.Name);
 
+            var value = propertyInfo.GetValue(obj);
             if (value == null) return null;
 
-            if (IsSelfContainingCompositeKey(propertyInfo))
+            if (AttributeChecker.IsSelfContainingCompositeKey(propertyInfo))
                 return SelfContainingCompositeKeyMapper.GetSelfContainingCompositeKeyAttributeValue(obj, propertyInfo.Name);
+
+            var type = propertyInfo.PropertyType;
 
             if (type == typeof(string))
                 return ((string)value).GetAttributeValue();
@@ -94,15 +97,10 @@ namespace Conditus.DynamoDB.MappingExtensions.Mappers
         {
             var enumerablePropertyValue = (IEnumerable)propertyValue;
 
-            if (IsMapList(propertyInfo))
+            if (AttributeChecker.IsMapList(propertyInfo))
                 return enumerablePropertyValue.GetMapAttributeValue();
 
             return new AttributeValue { S = JsonSerializer.Serialize(propertyValue) };
         }
-
-        private static bool IsMapList(PropertyInfo propertyInfo)
-            => propertyInfo.GetCustomAttribute(typeof(DynamoDBMapListAttribute), false) != null;
-        private static bool IsSelfContainingCompositeKey(PropertyInfo propertyInfo)
-            => propertyInfo.GetCustomAttribute(typeof(DynamoDBSelfContainingCompositeKeyAttribute), false) != null;
     }
 }

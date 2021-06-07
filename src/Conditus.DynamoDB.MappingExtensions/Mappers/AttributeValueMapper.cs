@@ -49,7 +49,7 @@ namespace Conditus.DynamoDB.MappingExtensions.Mappers
         {
             var propertyType = propertyInfo.PropertyType;
 
-            if (propertyInfo.GetCustomAttribute(typeof(DynamoDBSelfContainingCompositeKeyAttribute)) != null)
+            if (AttributeChecker.IsSelfContainingCompositeKey(propertyInfo))
                 return SelfContainingCompositeKeyMapper.SelfContainingCompositeKeyToEntity(attributeValue, propertyType);
 
             if (propertyType == typeof(string))
@@ -70,7 +70,7 @@ namespace Conditus.DynamoDB.MappingExtensions.Mappers
             if (propertyType == typeof(DateTime) || propertyType == typeof(DateTime?))
                 return DateTimeMapper.FromUtcUnixTimeMilliseconds(attributeValue.N);
 
-            if (propertyInfo.GetCustomAttribute(typeof(DynamoDBMapListAttribute)) != null)
+            if (AttributeChecker.IsMapList(propertyInfo))
                 return ListMapper.ToEntityList(
                     attributeValue.M,
                     propertyType.GetGenericArguments().First());
