@@ -65,9 +65,9 @@ namespace Conditus.DynamoDB.MappingExtensions.Mappers
                 .ToList();
         }
 
-        public static IList ToEntityList(this Dictionary<string, AttributeValue> map, Type elementType)
+        public static IList ToEntityList(this Dictionary<string, AttributeValue> map, Type entityType)
         {
-            var listType = typeof(List<>).MakeGenericType(elementType);
+            var listType = typeof(List<>).MakeGenericType(entityType);
             var listInstance = Activator.CreateInstance(listType);
             var entityList = (IList)listInstance;
 
@@ -81,7 +81,33 @@ namespace Conditus.DynamoDB.MappingExtensions.Mappers
                 throw new NotImplementedException();
 
             foreach (var attribute in attributeValues)
-                entityList.Add(attribute.M.ToEntity(elementType));
+                entityList.Add(attribute.M.ToEntity(entityType));
+
+            return entityList;
+        }
+
+        public static List<T> ToEntityList<T>(this IEnumerable<AttributeValue> attributeValueList)
+            where T : new()
+        {
+            return attributeValueList.ToEntityList(typeof(T))
+                .Cast<T>()
+                .ToList();
+        }
+    
+        public static IList ToEntityList(this IEnumerable<AttributeValue> attributeValues, Type entityType)
+        {
+            var listType = typeof(List<>).MakeGenericType(entityType);
+            var listInstance = Activator.CreateInstance(listType);
+            var entityList = (IList)listInstance;
+            
+            if (attributeValues.Count() == 0)
+                return entityList;
+
+            if (!attributeValues.First().IsMSet)
+                throw new NotImplementedException();
+
+            foreach (var attribute in attributeValues)
+                entityList.Add(attribute.M.ToEntity(entityType));
 
             return entityList;
         }

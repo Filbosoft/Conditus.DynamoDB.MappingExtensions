@@ -78,6 +78,9 @@ namespace Conditus.DynamoDB.MappingExtensions.Mappers
             if (attributeValue.IsMSet)
                 return attributeValue.M.ToEntity(propertyType);
 
+            if (attributeValue.IsLSet)
+                return attributeValue.L.ToEntityList(propertyType.GetGenericArguments().First());
+
             return null;
         }
     }
