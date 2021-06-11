@@ -93,5 +93,18 @@ namespace Conditus.DynamoDB.MappingExtensions.UnitTests.MapperTests.ListMapperTe
             elementAttributeValueMap.Should().NotBeEmpty()
                 .And.BeEquivalentTo(expectedElementMap);
         }
+
+        [Fact]
+        public void GetListAttributeValue_WithEmptyList_ShouldReturnNull()
+        {
+            //Given
+            var emptyList = new List<NestedItem>();
+
+            //When
+            var listAttributeValue = emptyList.GetListAttributeValue();
+
+            //Then
+            listAttributeValue.Should().BeNull();
+        }
     }
 }

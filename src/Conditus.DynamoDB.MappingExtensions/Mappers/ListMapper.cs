@@ -47,6 +47,9 @@ namespace Conditus.DynamoDB.MappingExtensions.Mappers
         {
             var attributeList = GetAttributeValueList(enumerable);
 
+            if (attributeList == null)
+                return null;
+
             return new AttributeValue { L = attributeList };
         }
 
