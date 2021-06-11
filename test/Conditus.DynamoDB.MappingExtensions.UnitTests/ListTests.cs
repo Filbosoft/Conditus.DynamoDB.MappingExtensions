@@ -66,7 +66,7 @@ namespace Conditus.DynamoDB.MappingExtensions.UnitTests
             var obj = new List<object>();
 
             //When
-            var attributeValue = ((IEnumerable)obj).GetMapAttributeValue();
+            var attributeValue = ((IEnumerable)obj).GetListMapMapAttributeValue();
 
             //Then
             attributeValue.Should().BeNull();

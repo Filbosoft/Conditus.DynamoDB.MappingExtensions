@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Text.Json;
 using Amazon.DynamoDBv2.Model;
 using Conditus.DynamoDB.MappingExtensions.Attributes;
 
@@ -98,9 +97,11 @@ namespace Conditus.DynamoDB.MappingExtensions.Mappers
             var enumerablePropertyValue = (IEnumerable)propertyValue;
 
             if (AttributeChecker.IsMapList(propertyInfo))
-                return enumerablePropertyValue.GetMapAttributeValue();
+                return enumerablePropertyValue.GetListMapMapAttributeValue();
 
-            return new AttributeValue { S = JsonSerializer.Serialize(propertyValue) };
+            var listAttributeValue = enumerablePropertyValue.GetListAttributeValue();
+
+            return listAttributeValue;
         }
     }
 }

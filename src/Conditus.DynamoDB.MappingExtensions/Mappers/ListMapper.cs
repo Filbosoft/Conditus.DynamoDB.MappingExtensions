@@ -10,9 +10,9 @@ namespace Conditus.DynamoDB.MappingExtensions.Mappers
 {
     public static class ListMapper
     {
-        public static AttributeValue GetMapAttributeValue(this IEnumerable enumerable)
+        public static AttributeValue GetListMapMapAttributeValue(this IEnumerable enumerable)
         {
-            var attributeMap = enumerable.GetAttributeValueMap();
+            var attributeMap = enumerable.GetListMapAttributeValueMap();
 
             if (attributeMap == null)
                 return null;
@@ -20,7 +20,7 @@ namespace Conditus.DynamoDB.MappingExtensions.Mappers
             return new AttributeValue { M = attributeMap };
         }
 
-        public static Dictionary<string, AttributeValue> GetAttributeValueMap(this IEnumerable enumerable)
+        public static Dictionary<string, AttributeValue> GetListMapAttributeValueMap(this IEnumerable enumerable)
         {
             var list = enumerable.Cast<object>()
                 .ToList<object>();
@@ -41,6 +41,30 @@ namespace Conditus.DynamoDB.MappingExtensions.Mappers
             }
 
             return map;
+        }
+
+        public static AttributeValue GetListAttributeValue(this IEnumerable enumerable)
+        {
+            var attributeList = GetAttributeValueList(enumerable);
+
+            return new AttributeValue { L = attributeList };
+        }
+
+        public static List<AttributeValue> GetAttributeValueList(this IEnumerable enumerable)
+        {
+            var elementType = enumerable.GetType()
+                .GetGenericArguments().First();
+            var list = enumerable.Cast<object>()
+                .ToList<object>();
+
+            if (list.Count == 0)
+                return null;
+
+            var attributeValues = list
+                .Select(item => item.GetAttributeValue(elementType))
+                .ToList();
+
+            return attributeValues;
         }
 
         public static PropertyInfo GetHashProperty(object obj)
@@ -93,13 +117,13 @@ namespace Conditus.DynamoDB.MappingExtensions.Mappers
                 .Cast<T>()
                 .ToList();
         }
-    
+
         public static IList ToEntityList(this IEnumerable<AttributeValue> attributeValues, Type entityType)
         {
             var listType = typeof(List<>).MakeGenericType(entityType);
             var listInstance = Activator.CreateInstance(listType);
             var entityList = (IList)listInstance;
-            
+
             if (attributeValues.Count() == 0)
                 return entityList;
 
